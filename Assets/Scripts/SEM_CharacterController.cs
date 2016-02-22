@@ -13,7 +13,10 @@ public class SEM_CharacterController : MonoBehaviour {
     {
         get
         {
-            float direction = Input.GetAxis("Vertical");
+            float direction = Input.GetAxis("XboxAccel");
+
+            if (direction == 0)
+                direction = Input.GetAxis("KeyboardAccel");
 
             
             if (Mathf.Abs(CurrentSpeed) >= MaxSpeeds[Gear - 1])
@@ -47,16 +50,77 @@ public class SEM_CharacterController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+        
         
 
         MoveForevard();
+        Turn();
+        GearShift();
+        
 
+
+
+    }
+    public float GearDelay = 1f;
+    public bool GearShifted = false;
+    private void GearShift()
+    {
+        if (GearShifted)
+        {
+            
+            return;
+        }
+        
+
+
+        float gearVal = Input.GetAxis("XboxGearShift");
+
+        if (gearVal == 0)
+            return;
+
+        
+
+        if (gearVal > 0)
+        {
+            if (Gear >= MaxSpeeds.Count)
+            {
+                Gear = MaxSpeeds.Count;
+                return;
+            }
+
+            GearShifted = true;
+            Gear++;
+            StartCoroutine(Shifted());
+            return;
+
+        }
+        else if (gearVal < 0)
+        {
+            if (Gear <= 1)
+            {
+                Gear = 1;
+                return;
+            }
+            GearShifted = true;
+            Gear--;
+            StartCoroutine(Shifted());
+            
+        }
+
+    }
+
+    private IEnumerator Shifted()
+    {
+        yield return new WaitForSeconds(GearDelay);
+
+        GearShifted = false;
+
+    }
+
+    private void Turn()
+    {
         float rotation = Input.GetAxis("Horizontal") * TurningSpeed;
         transform.Rotate(0, rotation, 0);
-
-
-
     }
 
     private void MoveForevard()
