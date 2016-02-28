@@ -8,7 +8,7 @@ public class SEM_CharacterController : MonoBehaviour {
     public List<float> MaxSpeeds;
     public int Gear = 1;
     public float AccelerationRate;
-    private float CurrentSpeed = 0f;
+    public float CurrentSpeed = 0f;
     public float Speed
     {
         get
@@ -109,6 +109,8 @@ public class SEM_CharacterController : MonoBehaviour {
 
     }
 
+   
+
     private IEnumerator Shifted()
     {
         yield return new WaitForSeconds(GearDelay);
@@ -137,4 +139,22 @@ public class SEM_CharacterController : MonoBehaviour {
 
         rb.AddForce(transform.forward * Speed);
     }
+
+
+    internal IEnumerator powerUp(float powerScale)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal IEnumerator powerDown(float powerScale)
+    {
+        float AccelerationRateRestore = AccelerationRate;
+
+        CurrentSpeed *= powerScale;
+        AccelerationRate *= powerScale;
+
+        yield return new WaitForSeconds(1);
+        AccelerationRate = AccelerationRateRestore;
+    }
+
 }

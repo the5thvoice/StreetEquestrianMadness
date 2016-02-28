@@ -9,10 +9,18 @@ public enum ObjectType
     FixedBarrier,
 }
 
+public enum CollectableType
+{
+    powerUp,
+    powerDown,
+}
+
 public class SEM_InteractableObject : MonoBehaviour
 {
 
     public ObjectType ItemType;
+    public CollectableType Collecctable;
+    public float PowerScale;
 
     Rigidbody RB;
 
@@ -57,6 +65,7 @@ public class SEM_InteractableObject : MonoBehaviour
         {
 
             case ObjectType.collectable:
+                ApplyEffect(collision.gameObject,  PowerScale);
                 Destroy(gameObject);
                 return;
                 //todo: damage application when/if helath system implemented
@@ -66,4 +75,28 @@ public class SEM_InteractableObject : MonoBehaviour
 
 
     }
+
+    private void ApplyEffect(GameObject CollidingObject,  float powerScale)
+    {
+
+        if (CollidingObject.tag != "Player")
+            return;
+
+        switch (Collecctable)
+        {
+            case CollectableType.powerDown:
+                StartCoroutine(CollidingObject.GetComponent<SEM_CharacterController>().powerDown(powerScale));
+                return;
+            case CollectableType.powerUp:
+                StartCoroutine(CollidingObject.GetComponent<SEM_CharacterController>().powerUp(powerScale));
+                return;
+
+        }
+
+        
+    }
+
+    
+
+    
 }
