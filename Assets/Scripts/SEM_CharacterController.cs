@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 
 public class SEM_CharacterController : MonoBehaviour {
-
+    public Players PlayerNumber;
     public List<float> MaxSpeeds;
     public int Gear = 1;
     public float AccelerationRate;
@@ -13,10 +13,10 @@ public class SEM_CharacterController : MonoBehaviour {
     {
         get
         {
-            float direction = Input.GetAxis("XboxAccel");
+            float direction = Input.GetAxis(SEM_ControllerController.Accelerator(PlayerNumber, false));
 
             if (direction == 0)
-                direction = Input.GetAxis("KeyboardAccel");
+                direction = Input.GetAxis(SEM_ControllerController.Accelerator(PlayerNumber, true));
 
             
             if (Mathf.Abs(CurrentSpeed) >= MaxSpeeds[Gear - 1])
@@ -73,7 +73,7 @@ public class SEM_CharacterController : MonoBehaviour {
         
 
 
-        float gearVal = Input.GetAxis("XboxGearShift");
+        float gearVal = Input.GetAxis(SEM_ControllerController.GearShift(PlayerNumber));
 
         if (gearVal == 0)
             return;
@@ -119,7 +119,15 @@ public class SEM_CharacterController : MonoBehaviour {
 
     private void Turn()
     {
-        float rotation = Input.GetAxis("Horizontal") * TurningSpeed;
+        float rotation = Input.GetAxis(SEM_ControllerController.Horizantal(PlayerNumber, false)) ;
+
+        if (rotation == 0)
+        {
+            rotation = Input.GetAxis(SEM_ControllerController.Horizantal(PlayerNumber, true));
+        }
+
+        rotation *= TurningSpeed;
+
         transform.Rotate(0, rotation, 0);
     }
 

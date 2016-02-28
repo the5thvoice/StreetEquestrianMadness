@@ -15,10 +15,11 @@ public class SEM_ControllerController : MonoBehaviour {
         {
             default:
             case Players.PlayerOne:
-                if (Keyboard)
-                    return "PlayerOneHorizontalPad";
+                if (!Keyboard)
+                    return "PlayerOneHorizontal";
                 else
                     return "PlayerOneHorizontalKeyboard";
+                
             case Players.PlayerTwo:
                 return "PlayerTwoHorizontal";
 
@@ -31,7 +32,7 @@ public class SEM_ControllerController : MonoBehaviour {
         {
             default:
             case Players.PlayerOne:
-                if (Keyboard)
+                if (!Keyboard)
                     return "PlayerOneAccelPad";
                 else
                     return "PlayerOneAccelKeyboard";
@@ -42,16 +43,15 @@ public class SEM_ControllerController : MonoBehaviour {
     }
 
 
-    public static string GearShift(Players p, bool Keyboard)
+    public static string GearShift(Players p)
     {
         switch (p)
         {
             default:
             case Players.PlayerOne:
-                if (Keyboard)
-                    return "PlayerOneGearShiftPad";
-                else
-                    return "PlayerOneGearShiftKeyboard";
+                
+                    return "PlayerOneGearShift";
+                
             case Players.PlayerTwo:
                 return "PlayerTwoGearShift";
 
