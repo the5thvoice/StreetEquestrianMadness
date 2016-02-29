@@ -18,12 +18,38 @@ public class SEM_CharacterController : MonoBehaviour {
             if (direction == 0)
                 direction = Input.GetAxis(SEM_ControllerController.Accelerator(PlayerNumber, true));
 
-            
-            if (Mathf.Abs(CurrentSpeed) >= MaxSpeeds[Gear - 1])
-                return direction * MaxSpeeds[Gear - 1];
-            else
+            if (direction < 0)
             {
-                CurrentSpeed += AccelerationRate;
+                if (Mathf.Abs(CurrentSpeed) >= MaxSpeeds[Gear - 1])
+                    CurrentSpeed = 0 - MaxSpeeds[Gear - 1];
+                else
+                    CurrentSpeed -= AccelerationRate;
+
+            }
+            else if (direction > 0)
+            {
+                if (Mathf.Abs(CurrentSpeed) >= MaxSpeeds[Gear - 1])
+                {
+
+                    CurrentSpeed = MaxSpeeds[Gear - 1];
+                }
+                else
+                    CurrentSpeed += AccelerationRate;
+            }
+            else if (direction == 0 && CurrentSpeed > 0)
+                CurrentSpeed -= (CurrentSpeed- GetComponent<Rigidbody>().velocity.magnitude);
+            else if (direction == 0 && CurrentSpeed < 0)
+                CurrentSpeed += (Mathf.Abs(CurrentSpeed) - GetComponent<Rigidbody>().velocity.magnitude);
+
+            
+            if (Mathf.Abs(CurrentSpeed) >= MaxSpeeds[Gear - 1]) { 
+               
+                return direction * MaxSpeeds[Gear - 1];
+            }
+            else 
+            {
+                
+                
                 return direction * CurrentSpeed;
             }
            
@@ -135,7 +161,9 @@ public class SEM_CharacterController : MonoBehaviour {
 
     private void MoveForevard()
     {
+
         
+
 
         rb.AddForce(transform.forward * Speed);
     }
