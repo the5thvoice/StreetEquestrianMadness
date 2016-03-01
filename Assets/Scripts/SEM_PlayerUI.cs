@@ -62,8 +62,17 @@ public class SEM_PlayerUI : MonoBehaviour {
         {
             case Players.PlayerOne:
 
+                if (p == PlayerNumber)
+                    Win_Lose.text = "Bragging Rights";
+                else
+                    Win_Lose.text = "you lose";
+
                 return;
             case Players.PlayerTwo:
+                if (p == PlayerNumber)
+                    Win_Lose.text = "Bragging Rights";
+                else
+                    Win_Lose.text = "you lose";
 
                 return;
         }
