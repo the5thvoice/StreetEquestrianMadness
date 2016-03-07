@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class SEM_CharacterController : MonoBehaviour {
+public class SEM_CharacterController : MonoBehaviour
+{
     public Players PlayerNumber;
     public List<float> MaxSpeeds;
     public int Gear = 1;
@@ -37,31 +38,33 @@ public class SEM_CharacterController : MonoBehaviour {
                     CurrentSpeed += AccelerationRate;
             }
             else if (direction == 0 && CurrentSpeed > 0)
-                CurrentSpeed -= (CurrentSpeed- GetComponent<Rigidbody>().velocity.magnitude);
+                CurrentSpeed -= (CurrentSpeed - GetComponent<Rigidbody>().velocity.magnitude);
             else if (direction == 0 && CurrentSpeed < 0)
                 CurrentSpeed += (Mathf.Abs(CurrentSpeed) - GetComponent<Rigidbody>().velocity.magnitude);
 
-            
-            if (Mathf.Abs(CurrentSpeed) >= MaxSpeeds[Gear - 1]) { 
-               
+
+            if (Mathf.Abs(CurrentSpeed) >= MaxSpeeds[Gear - 1])
+            {
+
                 return direction * MaxSpeeds[Gear - 1];
             }
-            else 
+            else
             {
-                
-                
+
+
                 return direction * CurrentSpeed;
             }
-           
-           
 
-            
+
+
+
         }
     }
 
     public float TurningSpeed;
+    public float BankSpeed;
 
-    
+
     Rigidbody _rb;
     Rigidbody rb
     {
@@ -73,30 +76,58 @@ public class SEM_CharacterController : MonoBehaviour {
         }
     }
 
-	
-	// Update is called once per frame
-	void Update () {
-        
-        
-
+    public void FixedUpdate()
+    {
         MoveForevard();
-        Turn();
-        GearShift();
+    }
+
+
+    // Update is called once per frame
+    void Update()
+    {
+
+
+
         
+        Turn();
+        
+        GearShift();
+
 
 
 
     }
+
+
+    public void Bank()
+    {
+
+        float rotation = Input.GetAxis(SEM_ControllerController.Horizantal(PlayerNumber, false));
+
+        if (rotation == 0)
+        {
+            rotation = Input.GetAxis(SEM_ControllerController.Horizantal(PlayerNumber, true));
+        }
+
+
+        Vector3 bank = new Vector3(0, 0, rotation);
+        Quaternion bankRoatation = Quaternion.LookRotation(bank.normalized);
+        transform.rotation = Quaternion.Slerp(transform.rotation, bankRoatation, Time.deltaTime*BankSpeed);
+
+
+    }
+
+
     public float GearDelay = 1f;
     public bool GearShifted = false;
     private void GearShift()
     {
         if (GearShifted)
         {
-            
+
             return;
         }
-        
+
 
 
         float gearVal = Input.GetAxis(SEM_ControllerController.GearShift(PlayerNumber));
@@ -104,7 +135,7 @@ public class SEM_CharacterController : MonoBehaviour {
         if (gearVal == 0)
             return;
 
-        
+
 
         if (gearVal > 0)
         {
@@ -130,12 +161,12 @@ public class SEM_CharacterController : MonoBehaviour {
             GearShifted = true;
             Gear--;
             StartCoroutine(Shifted());
-            
+
         }
 
     }
 
-   
+
 
     private IEnumerator Shifted()
     {
@@ -147,22 +178,43 @@ public class SEM_CharacterController : MonoBehaviour {
 
     private void Turn()
     {
-        float rotation = Input.GetAxis(SEM_ControllerController.Horizantal(PlayerNumber, false)) ;
+        float rotation = Input.GetAxis(SEM_ControllerController.Horizantal(PlayerNumber, false));
 
         if (rotation == 0)
         {
             rotation = Input.GetAxis(SEM_ControllerController.Horizantal(PlayerNumber, true));
         }
+        //Bank(rotation);
 
+
+        Vector3 bikeAngles = transform.localEulerAngles;
+        toBank = Mathf.Lerp(toBank, rotation, BankSpeed * Time.deltaTime);
+        bikeAngles.z = -toBank * bankAngle;
+        bikeAngles.x = 0;
+        transform.localEulerAngles = bikeAngles;
+                       
         rotation *= TurningSpeed;
-
+        
         transform.Rotate(0, rotation, 0);
+    }
+
+
+    public float bankAngle;
+    float toBank = 0;
+    private void Bank(float rotation)
+    {
+        Vector3 bikeAngles = transform.localEulerAngles;
+
+        toBank = Mathf.Lerp(toBank, rotation, BankSpeed * Time.deltaTime);
+        bikeAngles.z = -toBank * bankAngle;
+        bikeAngles.x = 0f;
+        transform.eulerAngles = bikeAngles;
     }
 
     private void MoveForevard()
     {
 
-        
+
 
 
         rb.AddForce(transform.forward * Speed);
