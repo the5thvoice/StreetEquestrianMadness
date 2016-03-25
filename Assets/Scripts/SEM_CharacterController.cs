@@ -61,6 +61,10 @@ public class SEM_CharacterController : MonoBehaviour
         }
     }
 
+    public WheelCollider FW;
+    public WheelCollider RW;
+
+
     public float TurningSpeed;
     public float BankSpeed;
 
@@ -88,9 +92,9 @@ public class SEM_CharacterController : MonoBehaviour
 
 
 
-        
+
         Turn();
-        
+
         GearShift();
 
 
@@ -112,7 +116,7 @@ public class SEM_CharacterController : MonoBehaviour
 
         Vector3 bank = new Vector3(0, 0, rotation);
         Quaternion bankRoatation = Quaternion.LookRotation(bank.normalized);
-        transform.rotation = Quaternion.Slerp(transform.rotation, bankRoatation, Time.deltaTime*BankSpeed);
+        transform.rotation = Quaternion.Slerp(transform.rotation, bankRoatation, Time.deltaTime * BankSpeed);
 
 
     }
@@ -176,6 +180,8 @@ public class SEM_CharacterController : MonoBehaviour
 
     }
 
+    
+
     private void Turn()
     {
         float rotation = Input.GetAxis(SEM_ControllerController.Horizantal(PlayerNumber, false));
@@ -192,32 +198,27 @@ public class SEM_CharacterController : MonoBehaviour
         bikeAngles.z = -toBank * bankAngle;
         bikeAngles.x = 0;
         transform.localEulerAngles = bikeAngles;
-                       
+
         rotation *= TurningSpeed;
-        
-        transform.Rotate(0, rotation, 0);
+
+        FW.steerAngle = rotation;
+
+        //transform.Rotate(0, rotation, 0);
     }
 
 
     public float bankAngle;
     float toBank = 0;
-    private void Bank(float rotation)
-    {
-        Vector3 bikeAngles = transform.localEulerAngles;
 
-        toBank = Mathf.Lerp(toBank, rotation, BankSpeed * Time.deltaTime);
-        bikeAngles.z = -toBank * bankAngle;
-        bikeAngles.x = 0f;
-        transform.eulerAngles = bikeAngles;
-    }
 
     private void MoveForevard()
     {
 
+        RW.motorTorque = Speed;
+        FW.motorTorque = Speed;
 
 
-
-        rb.AddForce(transform.forward * Speed);
+        //rb.AddForce(transform.forward * Speed);
     }
 
 
