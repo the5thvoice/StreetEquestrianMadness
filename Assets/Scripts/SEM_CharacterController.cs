@@ -17,10 +17,14 @@ public class SEM_CharacterController : MonoBehaviour
             float direction = Input.GetAxis(SEM_ControllerController.Accelerator(PlayerNumber, false));
 
             if (direction == 0)
+            {
+                Accelerating = false;
                 direction = Input.GetAxis(SEM_ControllerController.Accelerator(PlayerNumber, true));
+            }
 
             if (direction < 0)
             {
+                Accelerating = false;
                 if (Mathf.Abs(CurrentSpeed) >= MaxSpeeds[Gear - 1])
                     CurrentSpeed = 0 - MaxSpeeds[Gear - 1];
                 else
@@ -29,6 +33,7 @@ public class SEM_CharacterController : MonoBehaviour
             }
             else if (direction > 0)
             {
+                Accelerating = true;
                 if (Mathf.Abs(CurrentSpeed) >= MaxSpeeds[Gear - 1])
                 {
 
@@ -59,6 +64,12 @@ public class SEM_CharacterController : MonoBehaviour
 
 
         }
+    }
+
+    private bool Accelerating;
+    internal bool isAccelerating()
+    {
+        return Accelerating;
     }
 
     public WheelCollider FW;
