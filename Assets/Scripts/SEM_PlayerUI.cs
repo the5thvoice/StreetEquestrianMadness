@@ -53,9 +53,10 @@ public class SEM_PlayerUI : MonoBehaviour {
 
 	    if (!broken)
 	        DisplayVisualSpeed();
+        if (broken)
+            BreakObject();
 
-
-	}
+    }
 
     private float toBank;
     public float bankAngle;
@@ -63,15 +64,48 @@ public class SEM_PlayerUI : MonoBehaviour {
     {
         float rotation = 0;
         if (CurrentPlayer.CurrentSpeed > 0)
+        {
             rotation = -0.1f;
+            timeToBreak -= Time.deltaTime;
+        }
         else if (CurrentPlayer.CurrentSpeed < 0)
+        {
             rotation = 0.1f;
+            timeToBreak -= Time.deltaTime;
+        }
+
+        if (timeToBreak <= 0)
+        {
+            broken = true;
+            
+            return;
+            
+        }
 
         Vector3 needleaAngle = Needle.transform.localEulerAngles;
         toBank = Mathf.Lerp(toBank, rotation, Time.deltaTime);
         needleaAngle.z = -toBank*bankAngle;
         needleaAngle.x = 1;
         Needle.transform.localEulerAngles = needleaAngle;
+
+
+    }
+
+    private void BreakObject()
+    {
+
+        
+
+        if(!ScaleFace.gameObject.activeSelf || !Needle.gameObject.activeSelf)
+            return;
+        
+        ScaleFace.Translate(Vector3.down*Time.deltaTime*5);
+        Needle.Translate(Vector3.down*Time.deltaTime*2);
+
+        if (ScaleFace.position.y <= -150)
+            ScaleFace.gameObject.SetActive(false);
+
+
 
 
     }
