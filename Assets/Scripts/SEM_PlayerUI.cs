@@ -2,6 +2,8 @@
 using System.Collections;
 using UnityEngine.UI;
 using System;
+using System.Runtime.CompilerServices;
+using System.Security.Policy;
 
 public class SEM_PlayerUI : MonoBehaviour {
 
@@ -33,6 +35,11 @@ public class SEM_PlayerUI : MonoBehaviour {
     public Text Gear;
     public Text Win_Lose;
 
+    public RectTransform ScaleFace;
+    public RectTransform Needle;
+    public bool broken = false;
+    public float timeToBreak;
+
     // Use this for initialization
     void Start () {
 	
@@ -43,8 +50,31 @@ public class SEM_PlayerUI : MonoBehaviour {
 
         DisplaySpeed();
         DisplayGear();
-	
+
+	    if (!broken)
+	        DisplayVisualSpeed();
+
+
 	}
+
+    private float toBank;
+    public float bankAngle;
+    private void DisplayVisualSpeed()
+    {
+        float rotation = 0;
+        if (CurrentPlayer.CurrentSpeed > 0)
+            rotation = -0.1f;
+        else if (CurrentPlayer.CurrentSpeed < 0)
+            rotation = 0.1f;
+
+        Vector3 needleaAngle = Needle.transform.localEulerAngles;
+        toBank = Mathf.Lerp(toBank, rotation, Time.deltaTime);
+        needleaAngle.z = -toBank*bankAngle;
+        needleaAngle.x = 1;
+        Needle.transform.localEulerAngles = needleaAngle;
+
+
+    }
 
     private void DisplaySpeed()
     {

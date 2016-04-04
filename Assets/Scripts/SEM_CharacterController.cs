@@ -43,9 +43,9 @@ public class SEM_CharacterController : MonoBehaviour
                     CurrentSpeed += AccelerationRate;
             }
             else if (direction == 0 && CurrentSpeed > 0)
-                CurrentSpeed -= (CurrentSpeed - GetComponent<Rigidbody>().velocity.magnitude);
+                CurrentSpeed -= AccelerationRate;
             else if (direction == 0 && CurrentSpeed < 0)
-                CurrentSpeed += (Mathf.Abs(CurrentSpeed) - GetComponent<Rigidbody>().velocity.magnitude);
+                CurrentSpeed += AccelerationRate;
 
 
             if (Mathf.Abs(CurrentSpeed) >= MaxSpeeds[Gear - 1])
@@ -114,23 +114,7 @@ public class SEM_CharacterController : MonoBehaviour
     }
 
 
-    public void Bank()
-    {
 
-        float rotation = Input.GetAxis(SEM_ControllerController.Horizantal(PlayerNumber, false));
-
-        if (rotation == 0)
-        {
-            rotation = Input.GetAxis(SEM_ControllerController.Horizantal(PlayerNumber, true));
-        }
-
-
-        Vector3 bank = new Vector3(0, 0, rotation);
-        Quaternion bankRoatation = Quaternion.LookRotation(bank.normalized);
-        transform.rotation = Quaternion.Slerp(transform.rotation, bankRoatation, Time.deltaTime * BankSpeed);
-
-
-    }
 
 
     public float GearDelay = 1f;
