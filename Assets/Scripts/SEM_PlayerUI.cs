@@ -48,8 +48,8 @@ public class SEM_PlayerUI : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        DisplaySpeed();
-        DisplayGear();
+        //DisplaySpeed();
+        //DisplayGear();
 
 	    if (!broken)
 	        DisplayVisualSpeed();
