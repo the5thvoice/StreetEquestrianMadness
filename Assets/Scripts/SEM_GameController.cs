@@ -15,18 +15,40 @@ public class SEM_GameController : MonoBehaviour {
 
     public SEM_WaypointCheck FinishLine;
 
+    private AudioSource _ASource;
+
+    public AudioSource ASource
+    {
+        get
+        {
+            if (_ASource == null)
+                _ASource = GetComponent<AudioSource>();
+
+            return _ASource;
+        }
+    }
+
+
+
+
     void Start()
     {
         if (GameContoller == null)
             GameContoller = this;
+
+
     }
 
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
 
-        
-	
+	    PlayAudio();
+
+
+
+
 	}
 
     public bool CheckForWinElegibility (GameObject p)
@@ -42,9 +64,24 @@ public class SEM_GameController : MonoBehaviour {
         return true;
     }
 
-    private void PlayPause()
+    private void PlayAudio()
     {
-        throw new NotImplementedException();
+        float playerOneMoving = Input.GetAxis(SEM_ControllerController.Accelerator(Players.PlayerOne, false)); 
+       // Debug.Log(playerOneMoving);
+
+        if (playerOneMoving == 0)
+            playerOneMoving = Input.GetAxis(SEM_ControllerController.Accelerator(Players.PlayerOne, true));
+
+        float playerTwoMoving = playerOneMoving = Input.GetAxis(SEM_ControllerController.Accelerator(Players.PlayerTwo, false));
+
+        if(playerOneMoving > 0 || playerTwoMoving > 0)
+            ASource.Play();
+        else if (playerOneMoving < 0 || playerTwoMoving < 0)
+            ASource.Play();
+        else
+        {
+            ASource.Stop();
+        }
     }
 
     internal void Winner(Players p)
