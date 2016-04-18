@@ -16,6 +16,7 @@ public class SEM_GameController : MonoBehaviour {
     public SEM_WaypointCheck FinishLine;
 
     private AudioSource _ASource;
+    public List<AudioClip> Clips; 
 
     public AudioSource ASource
     {
@@ -64,6 +65,8 @@ public class SEM_GameController : MonoBehaviour {
         return true;
     }
 
+
+    private bool stopSound = true;
     private void PlayAudio()
     {
         float playerOneMoving = Input.GetAxis(SEM_ControllerController.Accelerator(Players.PlayerOne, false)); 
@@ -72,16 +75,37 @@ public class SEM_GameController : MonoBehaviour {
         if (playerOneMoving == 0)
             playerOneMoving = Input.GetAxis(SEM_ControllerController.Accelerator(Players.PlayerOne, true));
 
-        float playerTwoMoving = playerOneMoving = Input.GetAxis(SEM_ControllerController.Accelerator(Players.PlayerTwo, false));
+        float playerTwoMoving  = Input.GetAxis(SEM_ControllerController.Accelerator(Players.PlayerTwo, false));
 
-        if(playerOneMoving > 0 || playerTwoMoving > 0)
-            ASource.Play();
+        if (playerOneMoving > 0 || playerTwoMoving > 0)
+        {
+
+            PlayClip(Clips[0]);
+            stopSound = false;
+        }
+
         else if (playerOneMoving < 0 || playerTwoMoving < 0)
-            ASource.Play();
+        {
+            PlayClip(Clips[0]);
+            stopSound = false;
+        }
         else
         {
-            ASource.Stop();
+            if (stopSound)
+                return;
+
+            if (PlayClip(Clips[1]))
+                stopSound = true;
         }
+    }
+
+    private bool PlayClip(AudioClip audioClip)
+    {
+        if (ASource.isPlaying)
+            return false;
+        ASource.clip = audioClip;
+        ASource.Play();
+        return true;
     }
 
     internal void Winner(Players p)
