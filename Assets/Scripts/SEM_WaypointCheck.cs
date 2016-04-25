@@ -59,6 +59,14 @@ public class SEM_WaypointCheck : MonoBehaviour {
                 SEM_GameController.GameContoller.Winner(Players.PlayerOne);
             }
         }
+        else if (Vector3.Distance(PlayerTwo.transform.position, transform.position) < Radius)
+        {
+            if (SEM_GameController.GameContoller.CheckForWinElegibility(PlayerTwo))
+            {
+                PlayerTwoCheck = true;
+                SEM_GameController.GameContoller.Winner(Players.PlayerTwo);
+            }
+        }
 
     }
 
