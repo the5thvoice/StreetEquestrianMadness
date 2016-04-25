@@ -59,4 +59,13 @@ public class SEM_ControllerController : MonoBehaviour {
     }
 
 
+    public static string Quit()
+    {
+        return "QuitButton";
+    }
+
+    public static string Start()
+    {
+        return "StartButton";
+    }
 }
