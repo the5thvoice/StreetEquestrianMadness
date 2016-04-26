@@ -111,17 +111,19 @@ public class SEM_GameController : MonoBehaviour {
     internal void Winner(Players p)
     {
 
-        PlayerOne.GetComponentInChildren<SEM_PlayerUI>().WinLose(p);
-        PlayerTwo.GetComponentInChildren<SEM_PlayerUI>().WinLose(p);
+        //PlayerOne.GetComponentInChildren<SEM_PlayerUI>().WinLose(p);
+        //PlayerTwo.GetComponentInChildren<SEM_PlayerUI>().WinLose(p);
+        SEM_WinData.Winner = p;
         StartCoroutine(Reset());
 
     }
 
     private IEnumerator Reset()
     {
-        GameContoller = null;
         yield return new WaitForSeconds(5);
-        SceneManager.LoadScene(0);
+        GameContoller = null;
+       
+        SceneManager.LoadScene(2);
         //Application.LoadLevel(0);
     }
 }
