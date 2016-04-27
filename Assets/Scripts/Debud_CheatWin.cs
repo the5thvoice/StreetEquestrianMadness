@@ -14,8 +14,12 @@ public class Debud_CheatWin : MonoBehaviour
 
         float buttonpress = Input.GetAxis("DebugButton");
 
-        if (buttonpress > 0)
+        float random = Random.Range(0, 2);
+
+        if (buttonpress > 0 && random < 1) 
             SEM_GameController.GameContoller.Winner(Players.PlayerOne);
+        else if (buttonpress > 0 && random >= 1)
+            SEM_GameController.GameContoller.Winner(Players.PlayerTwo);
 
     }
 }
