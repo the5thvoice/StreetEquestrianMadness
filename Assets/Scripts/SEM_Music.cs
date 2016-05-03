@@ -7,14 +7,18 @@ public class SEM_Music : MonoBehaviour
 
     public List<AudioClip> Tracks;
     public AudioSource MusicPlayer;
+
+    public int debug;
    
 
 	// Use this for initialization
 	void Start ()
 	{
+	    System.Random rnd = new System.Random();
+	    int randomT = rnd.Next(Tracks.Count); 
+	    debug = randomT;
 
-	    int randomT = Random.Range(0, Tracks.Count - 1);
-
+        
 	    MusicPlayer.clip = Tracks[randomT];
 
 	}
